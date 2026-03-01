@@ -12,7 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;justify-content:center}
-.phone-frame{width:390px;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
+.phone-frame{width:100%;max-width:420px;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
 .status-bar{padding:10px 20px 6px;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;color:var(--dim);font-weight:500;flex-shrink:0}
 .app-header{padding:4px 20px 14px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
 .greeting h2{font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:700}
@@ -74,17 +74,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;dis
 .scanner-manual{padding:0 20px 30px;text-align:center}
 .scanner-manual-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 24px;border-radius:12px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
 .scanner-manual-btn:hover{border-color:var(--accent)}
-.result-overlay{position:absolute;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;background:rgba(8,9,13,0.97)}
+.result-overlay{position:absolute;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center;background:rgba(8,9,13,0.97)}
 .result-overlay.visible{display:flex}
-.result-icon{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin-bottom:24px;animation:popIn .4s cubic-bezier(0.175,0.885,0.32,1.275)}
+.result-icon{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:24px;animation:popIn .4s cubic-bezier(0.175,0.885,0.32,1.275)}
 @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
 .result-icon.ok{background:var(--green-soft);box-shadow:0 0 40px var(--green-glow)}
 .result-icon.no{background:var(--red-soft);box-shadow:0 0 40px rgba(248,113,113,0.2)}
-.result-title{font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:8px}
-.result-sub{color:var(--dim);font-size:.95rem;margin-bottom:4px}
-.result-detail{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-top:16px;font-size:.88rem;display:flex;align-items:center;gap:10px}
-.result-detail .rd-num{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:700}
-.result-close{margin-top:28px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 32px;border-radius:12px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+.result-title{font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:10px}
+.result-sub{color:var(--dim);font-size:1.05rem;margin-bottom:6px;line-height:1.4;padding:0 10px}
+.result-detail{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 24px;margin-top:20px;font-size:1rem;display:flex;align-items:center;gap:14px;width:100%;max-width:300px}
+.result-detail .rd-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700}
+.result-detail .rd-label{font-weight:600;font-size:.95rem}
+.result-detail .rd-sub{color:var(--dim);font-size:.85rem;margin-top:2px}
+.result-close{margin-top:28px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:14px 40px;border-radius:12px;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer}
 .login-screen{position:absolute;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
 .login-screen.hidden{display:none}
 .login-logo{font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
@@ -113,17 +115,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;dis
   <!-- LOGIN -->
   <div class="login-screen" id="loginScreen">
     <div class="login-logo">Tornello Virtuale</div>
-    <div class="login-sub">Accedi con il tuo numero tessera</div>
+    <div class="login-sub">Accedi con tessera e PIN</div>
     <div class="login-card">
       <h3>Login Corsista</h3>
       <div class="login-group">
         <label class="login-label">Numero tessera</label>
-        <input type="text" class="login-input" id="loginCard" placeholder="Es. FL-0001" autocapitalize="characters"
-          onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="text" class="login-input" id="loginCard" placeholder="Es. FL-0001" autocapitalize="characters">
+      </div>
+      <div class="login-group">
+        <label class="login-label">PIN (4 cifre)</label>
+        <input type="password" class="login-input" id="loginPin" placeholder="••••" inputmode="numeric" maxlength="4" pattern="[0-9]*"
+          onkeydown="if(event.key==='Enter')doLogin()" style="letter-spacing:8px;text-align:center;font-size:1.2rem">
       </div>
       <button class="login-btn" id="loginBtn" onclick="doLogin()">Accedi</button>
-      <div class="login-error" id="loginError">Tessera non trovata</div>
-      <div class="login-hint">Test: FL-0001 (Anna), FL-0002 (Francesco), EG-0001 (Valentina)</div>
+      <div class="login-error" id="loginError">Tessera o PIN non validi</div>
+      <div class="login-hint">Test: FL-0001 PIN 1234 (Anna), FL-0002 PIN 1234 (Francesco)</div>
     </div>
   </div>
 
@@ -185,7 +191,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;dis
     <div class="result-sub" id="successCourse">—</div>
     <div class="result-detail">
       <div class="rd-num" style="color:var(--green)" id="successRemain">—</div>
-      <div><div style="font-weight:600">Ingressi rimanenti</div><div style="color:var(--dim);font-size:.78rem">questa settimana</div></div>
+      <div><div class="rd-label">Ingressi rimanenti</div><div class="rd-sub">questa settimana</div></div>
     </div>
     <button class="result-close" onclick="closeResult()">Chiudi</button>
   </div>
@@ -197,7 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;dis
     <div class="result-sub" id="errorMsg">—</div>
     <div class="result-detail" style="border-color:rgba(248,113,113,0.2)">
       <div class="rd-num" style="color:var(--red)" id="errorDetail">—</div>
-      <div><div style="font-weight:600" id="errorDetailLabel">Errore</div><div style="color:var(--dim);font-size:.78rem" id="errorSub">—</div></div>
+      <div><div class="rd-label" id="errorDetailLabel">Errore</div><div class="rd-sub" id="errorSub">—</div></div>
     </div>
     <button class="result-close" onclick="closeResult()">Chiudi</button>
   </div>
@@ -234,11 +240,22 @@ function getWeekNumber(d) {
 // LOGIN
 // ============================================================
 const savedCard = localStorage.getItem('member_card');
-if (savedCard) { document.getElementById('loginCard').value = savedCard; doLogin(true); }
+const savedPin = localStorage.getItem('member_pin');
+if (savedCard && savedPin) {
+  document.getElementById('loginCard').value = savedCard;
+  document.getElementById('loginPin').value = savedPin;
+  doLogin(true);
+}
 
 async function doLogin(auto) {
   const card = document.getElementById('loginCard').value.trim().toUpperCase();
-  if (!card) return;
+  const pin = document.getElementById('loginPin').value.trim();
+  if (!card || !pin) return;
+  if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+    document.getElementById('loginError').textContent = 'Il PIN deve essere di 4 cifre';
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
   const btn = document.getElementById('loginBtn');
   btn.disabled = true; btn.textContent = 'Accesso...';
   document.getElementById('loginError').style.display = 'none';
@@ -248,14 +265,25 @@ async function doLogin(auto) {
 
   if (error || !member) {
     btn.disabled = false; btn.textContent = 'Accedi';
+    document.getElementById('loginError').textContent = 'Tessera non trovata';
     document.getElementById('loginError').style.display = 'block';
-    if (auto) localStorage.removeItem('member_card');
+    if (auto) { localStorage.removeItem('member_card'); localStorage.removeItem('member_pin'); }
+    return;
+  }
+
+  // Check PIN (stored in member.pin field, default 1234 for test)
+  const correctPin = member.pin || '1234';
+  if (pin !== correctPin) {
+    btn.disabled = false; btn.textContent = 'Accedi';
+    document.getElementById('loginError').textContent = 'PIN non corretto';
+    document.getElementById('loginError').style.display = 'block';
     return;
   }
 
   currentMember = member;
   currentGym = member.gyms;
   localStorage.setItem('member_card', card);
+  localStorage.setItem('member_pin', pin);
 
   // UI
   const names = member.full_name.split(' ');
@@ -272,11 +300,13 @@ async function doLogin(auto) {
 
 function doLogout() {
   localStorage.removeItem('member_card');
+  localStorage.removeItem('member_pin');
   currentMember = null;
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginBtn').disabled = false;
   document.getElementById('loginBtn').textContent = 'Accedi';
   document.getElementById('loginCard').value = '';
+  document.getElementById('loginPin').value = '';
 }
 
 // ============================================================
