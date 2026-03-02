@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tornello Virtuale — Presentazione</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090d;--surface:#111318;--surface2:#191c24;--border:#262a38;
+  --text:#eaecf5;--dim:#6b7194;
+  --accent:#7c6cf0;--accent-soft:rgba(124,108,240,0.12);--accent-glow:rgba(124,108,240,0.35);
+  --green:#34d399;--green-soft:rgba(52,211,153,0.1);--green-glow:rgba(52,211,153,0.35);
+  --orange:#fb923c;--red:#f87171;--blue:#60a5fa;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+
+/* SLIDE SYSTEM */
+.slides{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:60px 40px;
+  opacity:0;transform:translateX(60px);transition:opacity .6s ease,transform .6s ease;
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* Ambient */
+.slide::before{content:'';position:absolute;top:-30%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(124,108,240,0.05) 0%,transparent 70%);pointer-events:none}
+.slide::after{content:'';position:absolute;bottom:-20%;right:-5%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(52,211,153,0.03) 0%,transparent 70%);pointer-events:none}
+
+/* NAV */
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(17,19,24,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);
+  padding:16px 32px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-btn{
+  background:var(--surface);border:1px solid var(--border);color:var(--text);
+  padding:12px 28px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.95rem;
+  font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;
+}
+.nav-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.nav-btn:disabled{opacity:.2;cursor:not-allowed}
+.nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 16px var(--accent-glow)}
+.nav-btn.primary:hover{opacity:.9}
+.nav-progress{display:flex;gap:6px;align-items:center}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.3s}
+.nav-dot.active{background:var(--accent);width:24px;border-radius:4px}
+.nav-counter{color:var(--dim);font-size:.85rem;font-family:'JetBrains Mono',monospace}
+
+/* TYPOGRAPHY */
+.s-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;border:1px solid}
+.s-tag.purple{background:var(--accent-soft);color:var(--accent);border-color:rgba(124,108,240,0.2)}
+.s-tag.green{background:var(--green-soft);color:var(--green);border-color:rgba(52,211,153,0.2)}
+.s-tag.orange{background:rgba(251,146,60,0.1);color:var(--orange);border-color:rgba(251,146,60,0.2)}
+.s-tag.blue{background:rgba(96,165,250,0.1);color:var(--blue);border-color:rgba(96,165,250,0.2)}
+.s-title{font-family:'Outfit',sans-serif;font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:16px;max-width:800px;text-align:center}
+.s-title .hl{background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.s-sub{color:var(--dim);font-size:1.15rem;max-width:600px;text-align:center;line-height:1.6;margin-bottom:32px}
+
+/* CARDS GRID */
+.cards-row{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:1000px;z-index:1}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:28px;width:220px;text-align:center;transition:.3s;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.card .c-icon{font-size:2.2rem;margin-bottom:12px}
+.card .c-title{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.card .c-desc{color:var(--dim);font-size:.85rem;line-height:1.5}
+
+/* FLOW */
+.flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1000px;z-index:1}
+.flow-step{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:20px 16px;width:155px;text-align:center;
+  animation:fadeUp .5s ease both;
+}
+.flow-step .fs-num{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase}
+.flow-step .fs-icon{font-size:1.8rem;margin-bottom:6px}
+.flow-step .fs-title{font-size:.85rem;font-weight:600;margin-bottom:3px}
+.flow-step .fs-desc{color:var(--dim);font-size:.72rem;line-height:1.4}
+.flow-arrow{color:var(--accent);font-size:1.2rem;opacity:.5}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* MOCKUPS */
+.mockup-row{display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:1}
+.mockup{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);transition:.3s;
+}
+.mockup:hover{transform:scale(1.02)}
+.mockup-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.mockup-header .dot{width:8px;height:8px;border-radius:50%}
+.mockup-header .dot.r{background:#f87171}.mockup-header .dot.y{background:#fbbf24}.mockup-header .dot.g{background:#34d399}
+.mockup-body{padding:20px;min-height:180px;display:flex;flex-direction:column;gap:10px}
+
+/* COMPARISON */
+.compare-row{display:flex;gap:32px;max-width:900px;z-index:1;flex-wrap:wrap;justify-content:center}
+.compare-col{flex:1;min-width:280px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px}
+.compare-col h3{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.compare-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:.9rem;line-height:1.5}
+.compare-item .ci-icon{flex-shrink:0;font-size:1rem;margin-top:2px}
+.compare-col.old{border-color:rgba(248,113,113,0.2)}
+.compare-col.new{border-color:rgba(52,211,153,0.2)}
+
+/* STATS */
+.stats-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;z-index:1;max-width:800px}
+.stat-big{text-align:center;padding:20px 32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;min-width:160px}
+.stat-big .sb-num{font-family:'Outfit',sans-serif;font-size:2.8rem;font-weight:800}
+.stat-big .sb-label{color:var(--dim);font-size:.85rem;margin-top:4px}
+
+/* TIMELINE SECTION */
+.timeline{max-width:700px;z-index:1;width:100%}
+.tl-item{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.tl-dot.done{background:var(--green-soft);color:var(--green)}
+.tl-dot.next{background:var(--accent-soft);color:var(--accent)}
+.tl-dot.future{background:var(--surface2);color:var(--dim)}
+.tl-content h4{font-size:1rem;font-weight:600;margin-bottom:2px}
+.tl-content p{color:var(--dim);font-size:.88rem}
+
+/* ANIMATED ELEMENTS */
+.anim-delay-1{animation-delay:.1s}
+.anim-delay-2{animation-delay:.2s}
+.anim-delay-3{animation-delay:.3s}
+.anim-delay-4{animation-delay:.4s}
+.anim-delay-5{animation-delay:.5s}
+.anim-delay-6{animation-delay:.6s}
+
+/* Live demo mini */
+.demo-phone{
+  width:200px;background:var(--surface);border:2px solid var(--border);
+  border-radius:24px;padding:12px;flex-shrink:0;
+}
+.demo-phone .dp-bar{height:4px;width:40%;margin:0 auto 10px;background:var(--border);border-radius:2px}
+.demo-phone .dp-btn{background:linear-gradient(135deg,var(--accent),#5b4dd4);color:#fff;padding:10px;border-radius:10px;text-align:center;font-size:.75rem;font-weight:700;margin-bottom:8px;font-family:'Outfit',sans-serif}
+.demo-phone .dp-card{background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:6px}
+.demo-phone .dp-card .dp-name{font-size:.72rem;font-weight:600}
+.demo-phone .dp-card .dp-sub{font-size:.6rem;color:var(--dim)}
+.demo-phone .dp-card .dp-bar-mini{height:3px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden}
+.demo-phone .dp-card .dp-fill{height:100%;background:var(--green);border-radius:2px}
+
+.demo-totem{
+  width:320px;background:var(--surface);border:2px solid var(--border);
+  border-radius:16px;padding:16px;flex-shrink:0;
+}
+.demo-totem .dt-header{display:flex;justify-content:space-between;margin-bottom:12px;font-size:.7rem;color:var(--dim)}
+.demo-totem .dt-name{font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:2px}
+.demo-totem .dt-instr{color:var(--accent);font-size:.85rem;margin-bottom:8px}
+.demo-totem .dt-time{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--dim);margin-bottom:12px}
+.demo-totem .dt-counter{display:flex;align-items:center;gap:16px;background:var(--surface2);padding:14px;border-radius:12px;margin-bottom:12px}
+.demo-totem .dt-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:800;color:var(--green)}
+.demo-totem .dt-label{color:var(--dim);font-size:.78rem}
+.demo-totem .dt-qr{width:80px;height:80px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-left:auto}
+.demo-totem .dt-qr-grid{width:56px;height:56px;display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.demo-totem .dt-qr-grid span{background:#111;border-radius:1px}
+.demo-totem .dt-qr-grid span.w{background:white}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .slide{padding:40px 20px}
+  .s-title{font-size:2rem}
+  .s-sub{font-size:1rem}
+  .cards-row{gap:12px}
+  .card{width:160px;padding:20px}
+  .flow-step{width:130px;padding:14px 10px}
+  .flow-arrow{display:none}
+  .mockup-row{gap:16px}
+  .compare-row{gap:16px}
+  .stat-big{min-width:130px;padding:16px 20px}
+  .stat-big .sb-num{font-size:2rem}
+  .nav-btn{padding:10px 18px;font-size:.85rem}
+  .demo-totem{width:260px}
+}
+</style>
+</head>
+<body>
+
+<div class="slides" id="slides">
+
+<!-- ====== SLIDE 1: INTRO ====== -->
+<div class="slide active" id="s0">
+  <div class="s-tag purple">Presentazione progetto</div>
+  <div class="s-title"><span class="hl">Tornello Virtuale</span></div>
+  <div class="s-sub">Un sistema moderno per la gestione degli ingressi ai corsi delle nostre palestre. Addio fogli di carta e Google Sheets.</div>
+  <div class="stats-row">
+    <div class="stat-big"><div class="sb-num" style="color:var(--accent)">2</div><div class="sb-label">Palestre</div></div>
+    <div class="stat-big"><div class="sb-num" style="color:var(--green)">~1000</div><div class="sb-label">Iscritti per sede</div></div>
+    <div class="stat-big"><div class="sb-num" style="color:var(--orange)">∞</div><div class="sb-label">Corsi gestibili</div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 2: IL PROBLEMA ====== -->
+<div class="slide" id="s1">
+  <div class="s-tag orange">La situazione attuale</div>
+  <div class="s-title">Perché serve un <span class="hl">cambiamento</span></div>
+  <div class="s-sub">Il sistema attuale con Google Sheets e fogli di presenza manuali presenta diversi limiti operativi.</div>
+  <div class="compare-row">
+    <div class="compare-col old">
+      <h3>❌ Oggi</h3>
+      <div class="compare-item"><span class="ci-icon">🐌</span><div>Registrazione presenze lenta e manuale</div></div>
+      <div class="compare-item"><span class="ci-icon">📊</span><div>Google Sheets diventa lento con molti dati</div></div>
+      <div class="compare-item"><span class="ci-icon">❓</span><div>Nessun controllo automatico degli abbonamenti</div></div>
+      <div class="compare-item"><span class="ci-icon">📱</span><div>I corsisti non vedono i propri ingressi</div></div>
+      <div class="compare-item"><span class="ci-icon">⏱️</span><div>Nessun dato in tempo reale per gli istruttori</div></div>
+    </div>
+    <div class="compare-col new">
+      <h3>✅ Con Tornello Virtuale</h3>
+      <div class="compare-item"><span class="ci-icon">⚡</span><div>Check-in in 3 secondi con QR code</div></div>
+      <div class="compare-item"><span class="ci-icon">☁️</span><div>Database cloud veloce e scalabile</div></div>
+      <div class="compare-item"><span class="ci-icon">🔒</span><div>Validazione automatica abbonamenti e limiti</div></div>
+      <div class="compare-item"><span class="ci-icon">📲</span><div>App personale per ogni corsista</div></div>
+      <div class="compare-item"><span class="ci-icon">📡</span><div>Contatore presenze live per istruttori</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 3: COME FUNZIONA ====== -->
+<div class="slide" id="s2">
+  <div class="s-tag green">Il flusso</div>
+  <div class="s-title">Come funziona in <span class="hl">6 passi</span></div>
+  <div class="s-sub">Dalla preparazione della sala al report di fine giornata, tutto è automatico.</div>
+  <div class="flow">
+    <div class="flow-step anim-delay-1"><div class="fs-num">Passo 1</div><div class="fs-icon">🖥️</div><div class="fs-title">Totem si attiva</div><div class="fs-desc">20 min prima del corso, mostra il QR</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step anim-delay-2"><div class="fs-num">Passo 2</div><div class="fs-icon">📱</div><div class="fs-title">Corsista scansiona</div><div class="fs-desc">Apre l'app e inquadra il QR code</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step anim-delay-3"><div class="fs-num">Passo 3</div><div class="fs-icon">🔍</div><div class="fs-title">Validazione</div><div class="fs-desc">Il sistema verifica abbonamento e limiti</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step anim-delay-4"><div class="fs-num">Passo 4</div><div class="fs-icon">✅</div><div class="fs-title">Esito</div><div class="fs-desc">Conferma o nega l'accesso con motivo</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step anim-delay-5"><div class="fs-num">Passo 5</div><div class="fs-icon">📊</div><div class="fs-title">Aggiornamento</div><div class="fs-desc">Contatore si aggiorna in tempo reale</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step anim-delay-6"><div class="fs-num">Passo 6</div><div class="fs-icon">🔄</div><div class="fs-title">Prossimo corso</div><div class="fs-desc">Il totem passa automaticamente al dopo</div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 4: TOTEM ====== -->
+<div class="slide" id="s3">
+  <div class="s-tag purple">Componente 1</div>
+  <div class="s-title">Il <span class="hl">Totem</span> in sala</div>
+  <div class="s-sub">Installato sui Chromebook già presenti. Si attiva automaticamente, mostra il QR per il check-in e il contatore presenze in tempo reale.</div>
+  <div class="mockup-row">
+    <div class="demo-totem">
+      <div class="dt-header"><span>🟢 FitLife</span><span style="font-family:'JetBrains Mono',monospace">18:42</span></div>
+      <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:8px;background:var(--green-soft);color:var(--green);font-size:.7rem;font-weight:600;margin-bottom:10px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green)"></span> Check-in aperto</div>
+      <div class="dt-name">Pilates</div>
+      <div class="dt-instr">👤 Marco</div>
+      <div class="dt-time">18:00 → 19:00</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="dt-counter" style="flex:1">
+          <div><div class="dt-num" id="animCounter">0</div><div class="dt-label">presenti su 25</div></div>
+        </div>
+        <div class="dt-qr">
+          <div class="dt-qr-grid">
+            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
+            <span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span>
+            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
+            <span class="w"></span><span></span><span class="w"></span><span class="w"></span><span class="w"></span><span></span><span class="w"></span>
+            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
+            <span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span>
+            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:.72rem;color:var(--dim)">Prossimo: <strong style="color:var(--text)">Zumba</strong> alle 19:30</div>
+    </div>
+    <div style="max-width:300px;z-index:1">
+      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">✨ Attivazione automatica</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Il totem si accende 20 minuti prima di ogni corso e si spegne alla fine.</div></div>
+      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📡 Tempo reale</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Ogni check-in aggiorna istantaneamente il contatore su totem e vista istruttore.</div></div>
+      <div><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">🔄 Sostituzione istruttore</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">In caso di sostituzione, basta toccare il nome per aggiornarlo al volo.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 5: APP ====== -->
+<div class="slide" id="s4">
+  <div class="s-tag green">Componente 2</div>
+  <div class="s-title">L'<span class="hl">App</span> del corsista</div>
+  <div class="s-sub">Ogni corsista ha la sua app sullo smartphone. Login con tessera e PIN, scanner QR, e tutto il suo storico.</div>
+  <div class="mockup-row">
+    <div class="demo-phone">
+      <div class="dp-bar"></div>
+      <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.85rem;margin-bottom:8px">Ciao, Anna 👋</div>
+      <div class="dp-btn">📷 Scansiona QR per il check-in</div>
+      <div style="font-size:.6rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">I tuoi abbonamenti</div>
+      <div class="dp-card">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div class="dp-name">Pilates</div><span style="font-size:.55rem;padding:2px 6px;background:var(--green-soft);color:var(--green);border-radius:4px;font-weight:600">ATTIVO</span></div>
+        <div class="dp-sub">2 di 3 ingressi usati</div>
+        <div class="dp-bar-mini"><div class="dp-fill" style="width:66%"></div></div>
+      </div>
+      <div class="dp-card">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div class="dp-name">Zumba</div><span style="font-size:.55rem;padding:2px 6px;background:var(--green-soft);color:var(--green);border-radius:4px;font-weight:600">ATTIVO</span></div>
+        <div class="dp-sub">1 di 2 ingressi usati</div>
+        <div class="dp-bar-mini"><div class="dp-fill" style="width:50%"></div></div>
+      </div>
+    </div>
+    <div style="max-width:320px;z-index:1">
+      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">🔐 Accesso sicuro</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Login con numero tessera + PIN personale di 4 cifre. Il login resta salvato nel telefono.</div></div>
+      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📊 Ingressi sempre visibili</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Il corsista sa sempre quanti ingressi ha usato e quanti ne restano nella settimana.</div></div>
+      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">❌ Blocco automatico</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Se l'abbonamento è scaduto o gli ingressi sono esauriti, il check-in viene bloccato con un messaggio chiaro.</div></div>
+      <div><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📅 Prossime lezioni</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Calendario dei prossimi 7 giorni con orari e istruttori, basato sui propri abbonamenti attivi.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 6: SEGRETERIA ====== -->
+<div class="slide" id="s5">
+  <div class="s-tag blue">Componente 3</div>
+  <div class="s-title">Il <span class="hl">Pannello</span> Segreteria</div>
+  <div class="s-sub">Il centro di controllo: gestione corsi, monitoraggio presenze, anagrafica corsisti, report e archivio.</div>
+  <div class="cards-row">
+    <div class="card"><div class="c-icon">📊</div><div class="c-title">Dashboard</div><div class="c-desc">Panoramica giornaliera: corsi in corso, check-in totali, tasso presenza</div></div>
+    <div class="card"><div class="c-icon">📚</div><div class="c-title">Gestione corsi</div><div class="c-desc">Crea, modifica, sospendi, archivia e rinnova i corsi per ogni periodo</div></div>
+    <div class="card"><div class="c-icon">👥</div><div class="c-title">Corsisti</div><div class="c-desc">Anagrafica completa, tessere, abbonamenti, stato ingressi settimanali</div></div>
+    <div class="card"><div class="c-icon">🔄</div><div class="c-title">Ciclo corsi</div><div class="c-desc">Gestione mensile e bimestrale con archiviazione e rinnovo automatico</div></div>
+    <div class="card"><div class="c-icon">📈</div><div class="c-title">Report</div><div class="c-desc">Statistiche presenze, frequenza media, export dati</div></div>
+    <div class="card"><div class="c-icon">⚙️</div><div class="c-title">Impostazioni</div><div class="c-desc">Tempi check-in, dati palestra, gestione utenti, configurazione totem</div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 7: ISTRUTTORE ====== -->
+<div class="slide" id="s6">
+  <div class="s-tag orange">Componente 4</div>
+  <div class="s-title">La <span class="hl">Vista</span> Istruttore</div>
+  <div class="s-sub">Schermata essenziale per il monitor in sala: solo il contatore delle presenze, grande e leggibile.</div>
+  <div class="cards-row">
+    <div class="card" style="width:260px"><div class="c-icon">🔢</div><div class="c-title">Contatore grande</div><div class="c-desc">Numero presenti visibile a colpo d'occhio, con anello che cambia colore in base al riempimento</div></div>
+    <div class="card" style="width:260px"><div class="c-icon">🟢</div><div class="c-title">3 stati chiari</div><div class="c-desc">Check-in aperto → In corso → Standby. L'istruttore sa sempre in che fase si trova</div></div>
+    <div class="card" style="width:260px"><div class="c-icon">📋</div><div class="c-title">Storico rapido</div><div class="c-desc">Le presenze delle ultime lezioni per confronto immediato con la media</div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 8: INFRASTRUTTURA ====== -->
+<div class="slide" id="s7">
+  <div class="s-tag purple">Tecnologia</div>
+  <div class="s-title">Semplice e a <span class="hl">costo zero</span></div>
+  <div class="s-sub">Il sistema si basa su strumenti gratuiti e usa l'hardware già presente in palestra.</div>
+  <div class="cards-row">
+    <div class="card"><div class="c-icon">💰</div><div class="c-title">Costo zero</div><div class="c-desc">Supabase free tier, hosting gratuito. Nessun costo mensile per il software</div></div>
+    <div class="card"><div class="c-icon">🖥️</div><div class="c-title">Hardware esistente</div><div class="c-desc">I Chromebook già in sala diventano i totem. Nessun acquisto necessario</div></div>
+    <div class="card"><div class="c-icon">📱</div><div class="c-title">Nessuna app da scaricare</div><div class="c-desc">PWA: si apre dal browser e si installa con un tocco. Niente App Store</div></div>
+    <div class="card"><div class="c-icon">☁️</div><div class="c-title">Cloud sicuro</div><div class="c-desc">Dati su Supabase (PostgreSQL). Backup automatici, crittografia, GDPR</div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 9: PROSSIMI PASSI ====== -->
+<div class="slide" id="s8">
+  <div class="s-tag green">Roadmap</div>
+  <div class="s-title">Dove siamo e <span class="hl">prossimi passi</span></div>
+  <div class="s-sub">Il sistema è già stato progettato, prototipato e collegato a un database di test funzionante.</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Architettura database</h4><p>6 tabelle, relazioni, funzioni di validazione — tutto creato e testato</p></div></div>
+    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Prototipi interattivi</h4><p>Totem, App corsista, Pannello segreteria, Vista istruttore — tutti funzionanti</p></div></div>
+    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Database live con dati di test</h4><p>Supabase attivo con 2 palestre, 8 corsi, 18 corsisti e presenze simulate</p></div></div>
+    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Totem e App collegati al database</h4><p>Check-in reale, validazione automatica, contatore presenze in tempo reale</p></div></div>
+    <div class="tl-item"><div class="tl-dot next">→</div><div class="tl-content"><h4>Pannello segreteria e vista istruttore live</h4><p>Collegamento al database per completare l'ecosistema</p></div></div>
+    <div class="tl-item"><div class="tl-dot future">○</div><div class="tl-content"><h4>Integrazione ricevutario</h4><p>Collegamento con il processo giornaliero del gestore per import automatico iscritti</p></div></div>
+    <div class="tl-item"><div class="tl-dot future">○</div><div class="tl-content"><h4>Deploy e test in palestra</h4><p>Installazione totem sui Chromebook, test con corsisti reali</p></div></div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 10: FINALE ====== -->
+<div class="slide" id="s9">
+  <div class="s-tag purple">Grazie</div>
+  <div class="s-title" style="font-size:2.6rem">Pronti a <span class="hl">modernizzare</span><br>la gestione dei corsi?</div>
+  <div class="s-sub" style="margin-bottom:40px">Il sistema è progettato, testato e pronto per essere finalizzato. Bastano poche settimane per andare live.</div>
+  <div class="stats-row">
+    <div class="stat-big"><div class="sb-num" style="color:var(--green)">3s</div><div class="sb-label">Tempo di check-in</div></div>
+    <div class="stat-big"><div class="sb-num" style="color:var(--accent)">0€</div><div class="sb-label">Costi software</div></div>
+    <div class="stat-big"><div class="sb-num" style="color:var(--orange)">24/7</div><div class="sb-label">Dati accessibili</div></div>
+  </div>
+  <div style="margin-top:32px;color:var(--dim);font-size:.9rem;z-index:1">
+    <strong style="color:var(--text)">Tornello Virtuale</strong> — Progettato per le nostre palestre
+  </div>
+</div>
+
+</div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Indietro</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+    <div class="nav-progress" id="navDots"></div>
+    <div class="nav-counter"><span id="slideNum">1</span> / <span id="slideTotal">10</span></div>
+  </div>
+  <button class="nav-btn primary" id="nextBtn" onclick="nextSlide()">Avanti →</button>
+</div>
+
+<script>
+const totalSlides = 10;
+let current = 0;
+
+// Build dots
+const dotsEl = document.getElementById('navDots');
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToSlide(i);
+  dot.style.cursor = 'pointer';
+  dotsEl.appendChild(dot);
+}
+
+function goToSlide(n) {
+  if (n === current || n < 0 || n >= totalSlides) return;
+  
+  const oldSlide = document.getElementById('s' + current);
+  const newSlide = document.getElementById('s' + n);
+  
+  oldSlide.classList.remove('active');
+  oldSlide.classList.add('exit');
+  setTimeout(() => oldSlide.classList.remove('exit'), 600);
+  
+  newSlide.classList.add('active');
+  
+  current = n;
+  updateNav();
+
+  // Trigger counter animation on totem slide
+  if (current === 3) animateTotemCounter();
+}
+
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
+
+function updateNav() {
+  document.getElementById('prevBtn').disabled = (current === 0);
+  document.getElementById('nextBtn').disabled = (current === totalSlides - 1);
+  document.getElementById('nextBtn').textContent = current === totalSlides - 1 ? '🎉 Fine' : 'Avanti →';
+  document.getElementById('slideNum').textContent = current + 1;
+  
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.className = 'nav-dot' + (i === current ? ' active' : '');
+  });
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) nextSlide(); else prevSlide();
+  }
+});
+
+// Animate totem counter
+function animateTotemCounter() {
+  const el = document.getElementById('animCounter');
+  let n = 0;
+  const target = 18;
+  const interval = setInterval(() => {
+    n++;
+    el.textContent = n;
+    if (n >= target) clearInterval(interval);
+  }, 100);
+}
+</script>
+</body>
+</html>
