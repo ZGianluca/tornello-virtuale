@@ -3,468 +3,653 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tornello Virtuale — Presentazione</title>
+<title>Tornello Virtuale — Demo Operativa</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#08090d;--surface:#111318;--surface2:#191c24;--border:#262a38;
-  --text:#eaecf5;--dim:#6b7194;
-  --accent:#7c6cf0;--accent-soft:rgba(124,108,240,0.12);--accent-glow:rgba(124,108,240,0.35);
-  --green:#34d399;--green-soft:rgba(52,211,153,0.1);--green-glow:rgba(52,211,153,0.35);
-  --orange:#fb923c;--red:#f87171;--blue:#60a5fa;
-}
+:root{--bg:#08090d;--surface:#111318;--surface2:#191c24;--border:#262a38;--text:#eaecf5;--dim:#6b7194;--accent:#7c6cf0;--accent-soft:rgba(124,108,240,0.12);--accent-glow:rgba(124,108,240,0.35);--green:#34d399;--green-soft:rgba(52,211,153,0.1);--green-glow:rgba(52,211,153,0.35);--orange:#fb923c;--orange-soft:rgba(251,146,60,0.1);--red:#f87171;--red-soft:rgba(248,113,113,0.1);--blue:#60a5fa;--blue-soft:rgba(96,165,250,0.1)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
 
-/* SLIDE SYSTEM */
+/* SLIDES */
 .slides{position:relative;width:100vw;height:100vh;overflow:hidden}
-.slide{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:60px 40px;
-  opacity:0;transform:translateX(60px);transition:opacity .6s ease,transform .6s ease;
-  pointer-events:none;
-}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 40px 80px;opacity:0;transform:translateX(60px);transition:opacity .5s,transform .5s;pointer-events:none;overflow-y:auto}
 .slide.active{opacity:1;transform:translateX(0);pointer-events:all}
 .slide.exit{opacity:0;transform:translateX(-60px)}
-
-/* Ambient */
-.slide::before{content:'';position:absolute;top:-30%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(124,108,240,0.05) 0%,transparent 70%);pointer-events:none}
-.slide::after{content:'';position:absolute;bottom:-20%;right:-5%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(52,211,153,0.03) 0%,transparent 70%);pointer-events:none}
+.slide::before{content:'';position:absolute;top:-30%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(124,108,240,0.04) 0%,transparent 70%);pointer-events:none}
 
 /* NAV */
-.nav-bar{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:rgba(17,19,24,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);
-  padding:16px 32px;display:flex;align-items:center;justify-content:space-between;
-}
-.nav-btn{
-  background:var(--surface);border:1px solid var(--border);color:var(--text);
-  padding:12px 28px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.95rem;
-  font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;
-}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(17,19,24,0.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;justify-content:space-between}
+.nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 24px;border-radius:11px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s}
 .nav-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
-.nav-btn:disabled{opacity:.2;cursor:not-allowed}
+.nav-btn:disabled{opacity:.15;cursor:not-allowed}
 .nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 16px var(--accent-glow)}
-.nav-btn.primary:hover{opacity:.9}
-.nav-progress{display:flex;gap:6px;align-items:center}
-.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.3s}
-.nav-dot.active{background:var(--accent);width:24px;border-radius:4px}
-.nav-counter{color:var(--dim);font-size:.85rem;font-family:'JetBrains Mono',monospace}
+.nav-dots{display:flex;gap:5px}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.3s;cursor:pointer}
+.nav-dot.on{background:var(--accent);width:24px;border-radius:4px}
+.nav-info{color:var(--dim);font-size:.78rem;font-family:'JetBrains Mono',monospace;margin-top:4px;text-align:center}
 
-/* TYPOGRAPHY */
-.s-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;border:1px solid}
+/* TYPO */
+.s-tag{display:inline-flex;padding:5px 14px;border-radius:20px;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;border:1px solid}
 .s-tag.purple{background:var(--accent-soft);color:var(--accent);border-color:rgba(124,108,240,0.2)}
 .s-tag.green{background:var(--green-soft);color:var(--green);border-color:rgba(52,211,153,0.2)}
-.s-tag.orange{background:rgba(251,146,60,0.1);color:var(--orange);border-color:rgba(251,146,60,0.2)}
-.s-tag.blue{background:rgba(96,165,250,0.1);color:var(--blue);border-color:rgba(96,165,250,0.2)}
-.s-title{font-family:'Outfit',sans-serif;font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:16px;max-width:800px;text-align:center}
+.s-tag.blue{background:var(--blue-soft);color:var(--blue);border-color:rgba(96,165,250,0.2)}
+.s-tag.orange{background:var(--orange-soft);color:var(--orange);border-color:rgba(251,146,60,0.2)}
+.s-title{font-family:'Outfit',sans-serif;font-size:2.6rem;font-weight:800;line-height:1.15;margin-bottom:10px;text-align:center}
 .s-title .hl{background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.s-sub{color:var(--dim);font-size:1.15rem;max-width:600px;text-align:center;line-height:1.6;margin-bottom:32px}
+.s-sub{color:var(--dim);font-size:1rem;max-width:600px;text-align:center;line-height:1.6;margin-bottom:24px}
 
-/* CARDS GRID */
-.cards-row{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:1000px;z-index:1}
-.card{
-  background:var(--surface);border:1px solid var(--border);border-radius:16px;
-  padding:28px;width:220px;text-align:center;transition:.3s;
-}
-.card:hover{border-color:var(--accent);transform:translateY(-4px)}
-.card .c-icon{font-size:2.2rem;margin-bottom:12px}
-.card .c-title{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:6px}
-.card .c-desc{color:var(--dim);font-size:.85rem;line-height:1.5}
+/* PLAY BTN */
+.play-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;background:var(--accent-soft);border:1px solid rgba(124,108,240,0.3);color:var(--accent);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s;margin-top:4px}
+.play-btn:hover{background:var(--accent);color:#fff;transform:scale(1.03)}
+.play-btn:active{transform:scale(.98)}
+.play-btn.green{background:var(--green-soft);border-color:rgba(52,211,153,0.3);color:var(--green)}
+.play-btn.green:hover{background:var(--green);color:#fff}
+.play-btn.red{background:var(--red-soft);border-color:rgba(248,113,113,0.3);color:var(--red)}
+.play-btn.red:hover{background:var(--red);color:#fff}
+.play-btn.orange{background:var(--orange-soft);border-color:rgba(251,146,60,0.3);color:var(--orange)}
+.play-btn.orange:hover{background:var(--orange);color:#fff}
+.play-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 
-/* FLOW */
-.flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;max-width:1000px;z-index:1}
-.flow-step{
-  background:var(--surface);border:1px solid var(--border);border-radius:14px;
-  padding:20px 16px;width:155px;text-align:center;
-  animation:fadeUp .5s ease both;
-}
-.flow-step .fs-num{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase}
-.flow-step .fs-icon{font-size:1.8rem;margin-bottom:6px}
-.flow-step .fs-title{font-size:.85rem;font-weight:600;margin-bottom:3px}
-.flow-step .fs-desc{color:var(--dim);font-size:.72rem;line-height:1.4}
-.flow-arrow{color:var(--accent);font-size:1.2rem;opacity:.5}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* DEMO LAYOUT */
+.demo-row{display:flex;gap:36px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:1;max-width:1100px}
+.demo-side{max-width:280px}
+.demo-feat{margin-bottom:12px}
+.demo-feat .df-t{font-weight:700;font-size:.88rem;margin-bottom:2px}
+.demo-feat .df-d{color:var(--dim);font-size:.8rem;line-height:1.5}
 
-/* MOCKUPS */
-.mockup-row{display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:1}
-.mockup{
-  background:var(--surface);border:1px solid var(--border);border-radius:16px;
-  overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);transition:.3s;
-}
-.mockup:hover{transform:scale(1.02)}
-.mockup-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
-.mockup-header .dot{width:8px;height:8px;border-radius:50%}
-.mockup-header .dot.r{background:#f87171}.mockup-header .dot.y{background:#fbbf24}.mockup-header .dot.g{background:#34d399}
-.mockup-body{padding:20px;min-height:180px;display:flex;flex-direction:column;gap:10px}
+/* ========= TOTEM ========= */
+.totem{width:380px;background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:18px;flex-shrink:0;position:relative;transition:border-color .5s}
+.totem .t-top{display:flex;justify-content:space-between;font-size:.72rem;color:var(--dim);margin-bottom:10px}
+.totem .t-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:8px;font-size:.7rem;font-weight:600;margin-bottom:8px;transition:all .4s}
+.totem .t-badge.on{background:var(--green-soft);color:var(--green)}
+.totem .t-badge.off{background:var(--blue-soft);color:var(--blue)}
+.totem .t-badge.standby{background:var(--surface2);color:var(--dim)}
+.totem .t-name{font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:3px;transition:all .5s}
+.totem .t-instr{color:var(--accent);font-size:.85rem;margin-bottom:4px;transition:all .5s}
+.totem .t-time{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--dim);margin-bottom:14px;transition:all .5s}
+.totem .t-mid{display:flex;gap:14px;align-items:center}
+.totem .t-ctr{flex:1;background:var(--surface2);padding:16px;border-radius:12px;border:1px solid transparent;transition:all .4s}
+.totem .t-ctr.flash{border-color:var(--green);box-shadow:0 0 20px var(--green-glow)}
+.totem .t-num{font-family:'Outfit',sans-serif;font-size:2.6rem;font-weight:800;color:var(--green);transition:color .3s}
+.totem .t-label{color:var(--dim);font-size:.78rem}
+.totem .t-qr{width:90px;height:90px;background:white;border-radius:10px;display:grid;place-items:center;transition:opacity .5s}
+.totem .qr{width:62px;height:62px;display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.totem .qr span{background:#111;border-radius:1px}.totem .qr span.w{background:white}
+.totem .t-next{background:var(--surface2);border-radius:8px;padding:9px 14px;margin-top:12px;font-size:.75rem;color:var(--dim);transition:all .5s}
+.totem .t-toast{position:absolute;bottom:16px;left:16px;right:16px;padding:10px 14px;border-radius:10px;font-size:.8rem;font-weight:600;opacity:0;transform:translateY(10px);transition:.4s;text-align:center;pointer-events:none}
+.totem .t-toast.show{opacity:1;transform:translateY(0)}
+.totem .t-toast.ok{background:var(--green);color:#fff}
+.totem .t-toast.ko{background:var(--red);color:#fff}
 
-/* COMPARISON */
-.compare-row{display:flex;gap:32px;max-width:900px;z-index:1;flex-wrap:wrap;justify-content:center}
-.compare-col{flex:1;min-width:280px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px}
-.compare-col h3{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.compare-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:.9rem;line-height:1.5}
-.compare-item .ci-icon{flex-shrink:0;font-size:1rem;margin-top:2px}
-.compare-col.old{border-color:rgba(248,113,113,0.2)}
-.compare-col.new{border-color:rgba(52,211,153,0.2)}
+/* ========= PHONE ========= */
+.phone{width:240px;background:var(--surface);border:2px solid var(--border);border-radius:28px;padding:16px;flex-shrink:0;position:relative;overflow:hidden;min-height:440px}
+.phone .p-notch{height:4px;width:36%;margin:0 auto 12px;background:var(--border);border-radius:2px}
+/* Login */
+.phone .p-login{text-align:center;padding-top:30px}
+.phone .p-login-logo{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.phone .p-login-sub{color:var(--dim);font-size:.65rem;margin-bottom:16px}
+.phone .p-login-card{background:var(--surface2);border-radius:10px;padding:14px;text-align:left}
+.phone .p-login-card h4{font-size:.78rem;font-weight:700;text-align:center;margin-bottom:10px}
+.phone .p-lbl{font-size:.6rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;margin-top:8px}
+.phone .p-inp{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-family:inherit;font-size:.75rem;outline:none}
+.phone .p-inp-pin{letter-spacing:6px;text-align:center;font-size:.9rem}
+.phone .p-login-btn{width:100%;padding:9px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:10px}
+/* Home */
+.phone .p-home{display:none}
+.phone .p-home.show{display:block}
+.phone .p-login.hide{display:none}
+.phone .p-greet{font-family:'Outfit',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:8px}
+.phone .p-scan{background:linear-gradient(135deg,var(--accent),#5b4dd4);color:#fff;padding:10px;border-radius:10px;text-align:center;font-size:.75rem;font-weight:700;font-family:'Outfit',sans-serif;margin-bottom:10px;cursor:pointer}
+.phone .p-sec{font-size:.58rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.phone .p-card{background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:6px}
+.phone .p-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.phone .p-cname{font-size:.75rem;font-weight:600}
+.phone .p-cbadge{font-size:.52rem;padding:2px 6px;border-radius:4px;font-weight:600;background:var(--green-soft);color:var(--green)}
+.phone .p-csub{font-size:.62rem;color:var(--dim)}
+.phone .p-bar{height:4px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden}
+.phone .p-fill{height:100%;border-radius:2px;transition:width .8s,background .5s}
+/* Overlay */
+.phone .p-ov{position:absolute;inset:0;background:rgba(8,9,13,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.4s;border-radius:26px;padding:24px;text-align:center;z-index:10}
+.phone .p-ov.show{opacity:1;pointer-events:all}
+.phone .p-ov-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:12px}
+.phone .p-ov-icon.ok{background:var(--green-soft);box-shadow:0 0 24px var(--green-glow)}
+.phone .p-ov-icon.no{background:var(--red-soft);box-shadow:0 0 24px rgba(248,113,113,0.15)}
+.phone .p-ov-title{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.phone .p-ov-sub{color:var(--dim);font-size:.78rem;margin-bottom:10px;line-height:1.4}
+.phone .p-ov-box{background:var(--surface);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.phone .p-ov-num{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:700}
+.phone .p-ov-close{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 22px;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit}
 
-/* STATS */
-.stats-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;z-index:1;max-width:800px}
-.stat-big{text-align:center;padding:20px 32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;min-width:160px}
-.stat-big .sb-num{font-family:'Outfit',sans-serif;font-size:2.8rem;font-weight:800}
-.stat-big .sb-label{color:var(--dim);font-size:.85rem;margin-top:4px}
+/* ========= DASHBOARD ========= */
+.dash{width:560px;background:var(--surface);border:2px solid var(--border);border-radius:14px;overflow:hidden;flex-shrink:0}
+.dash .d-top{display:flex;align-items:center;gap:6px;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.dash .d-dot{width:7px;height:7px;border-radius:50%}
+.dash .d-sidebar{display:flex}
+.dash .d-sb{width:120px;background:var(--surface2);border-right:1px solid var(--border);padding:10px 0;flex-shrink:0}
+.dash .d-sb-item{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:.68rem;color:var(--dim);cursor:pointer;transition:.2s}
+.dash .d-sb-item:hover{background:rgba(124,108,240,0.04)}
+.dash .d-sb-item.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.dash .d-content{flex:1;padding:12px}
+.dash .d-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.dash .d-st{background:var(--surface2);border-radius:8px;padding:8px;text-align:center;transition:all .4s}
+.dash .d-st .dn{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700;transition:all .3s}
+.dash .d-st .dl{font-size:.58rem;color:var(--dim);margin-top:1px}
+.dash .d-tbl{font-size:.68rem;width:100%;border-collapse:collapse}
+.dash .d-tbl th{text-align:left;padding:5px 6px;color:var(--dim);font-weight:600;border-bottom:1px solid var(--border);font-size:.58rem;text-transform:uppercase;letter-spacing:.5px}
+.dash .d-tbl td{padding:5px 6px;border-bottom:1px solid var(--border);transition:all .3s}
+.dash .d-bg{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:5px;font-size:.56rem;font-weight:600}
+.dash .d-bg.g{background:var(--green-soft);color:var(--green)}
+.dash .d-bg.b{background:var(--blue-soft);color:var(--blue)}
+.dash .d-bg.d{background:var(--surface2);color:var(--dim)}
+.dash .d-bg.o{background:var(--orange-soft);color:var(--orange)}
+/* Corso card in corsi page */
+.dash .d-corsi{display:none}
+.dash .d-corsi.show{display:block}
+.dash .d-dashboard{display:block}
+.dash .d-dashboard.hide{display:none}
+.dash .d-cc{background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid var(--border)}
+.dash .d-cc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.dash .d-cc-name{font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700}
+.dash .d-cc-instr{color:var(--dim);font-size:.62rem}
+.dash .d-cc-days{display:flex;gap:3px;margin:4px 0}
+.dash .d-cc-day{padding:2px 6px;border-radius:4px;font-size:.58rem;font-weight:600;background:var(--bg);color:var(--dim)}
+.dash .d-cc-btns{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.dash .d-cc-btn{padding:3px 8px;border-radius:5px;font-size:.56rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text);transition:.2s;font-family:inherit}
+.dash .d-cc-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-/* TIMELINE SECTION */
-.timeline{max-width:700px;z-index:1;width:100%}
-.tl-item{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}
-.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
-.tl-dot.done{background:var(--green-soft);color:var(--green)}
-.tl-dot.next{background:var(--accent-soft);color:var(--accent)}
-.tl-dot.future{background:var(--surface2);color:var(--dim)}
-.tl-content h4{font-size:1rem;font-weight:600;margin-bottom:2px}
-.tl-content p{color:var(--dim);font-size:.88rem}
+/* ========= INSTRUCTOR ========= */
+.instr{width:420px;background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:24px;text-align:center;flex-shrink:0}
+.instr .i-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:8px;font-size:.72rem;font-weight:600;margin-bottom:10px;transition:all .4s}
+.instr .i-badge.on{background:var(--green-soft);color:var(--green)}
+.instr .i-badge.corso{background:var(--blue-soft);color:var(--blue)}
+.instr .i-name{font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:4px}
+.instr .i-sub{color:var(--dim);font-size:.88rem;margin-bottom:18px}
+.instr .i-ring{width:180px;height:180px;margin:0 auto 18px;position:relative}
+.instr .i-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.instr .i-ring .bg{fill:none;stroke:var(--surface2);stroke-width:10}
+.instr .i-ring .fg{fill:none;stroke:var(--green);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke .4s}
+.instr .i-rn{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);font-family:'Outfit',sans-serif;font-size:3.2rem;font-weight:800}
+.instr .i-rl{position:absolute;top:66%;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--dim)}
+.instr .i-cards{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.instr .i-c{background:var(--surface2);border-radius:8px;padding:10px 16px;text-align:center}
+.instr .i-c .icn{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700}
+.instr .i-c .icl{font-size:.62rem;color:var(--dim);margin-top:2px}
+.instr .i-hist{font-size:.72rem;color:var(--dim);text-align:left}
+.instr .i-hist div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
 
-/* ANIMATED ELEMENTS */
-.anim-delay-1{animation-delay:.1s}
-.anim-delay-2{animation-delay:.2s}
-.anim-delay-3{animation-delay:.3s}
-.anim-delay-4{animation-delay:.4s}
-.anim-delay-5{animation-delay:.5s}
-.anim-delay-6{animation-delay:.6s}
-
-/* Live demo mini */
-.demo-phone{
-  width:200px;background:var(--surface);border:2px solid var(--border);
-  border-radius:24px;padding:12px;flex-shrink:0;
-}
-.demo-phone .dp-bar{height:4px;width:40%;margin:0 auto 10px;background:var(--border);border-radius:2px}
-.demo-phone .dp-btn{background:linear-gradient(135deg,var(--accent),#5b4dd4);color:#fff;padding:10px;border-radius:10px;text-align:center;font-size:.75rem;font-weight:700;margin-bottom:8px;font-family:'Outfit',sans-serif}
-.demo-phone .dp-card{background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:6px}
-.demo-phone .dp-card .dp-name{font-size:.72rem;font-weight:600}
-.demo-phone .dp-card .dp-sub{font-size:.6rem;color:var(--dim)}
-.demo-phone .dp-card .dp-bar-mini{height:3px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden}
-.demo-phone .dp-card .dp-fill{height:100%;background:var(--green);border-radius:2px}
-
-.demo-totem{
-  width:320px;background:var(--surface);border:2px solid var(--border);
-  border-radius:16px;padding:16px;flex-shrink:0;
-}
-.demo-totem .dt-header{display:flex;justify-content:space-between;margin-bottom:12px;font-size:.7rem;color:var(--dim)}
-.demo-totem .dt-name{font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:2px}
-.demo-totem .dt-instr{color:var(--accent);font-size:.85rem;margin-bottom:8px}
-.demo-totem .dt-time{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--dim);margin-bottom:12px}
-.demo-totem .dt-counter{display:flex;align-items:center;gap:16px;background:var(--surface2);padding:14px;border-radius:12px;margin-bottom:12px}
-.demo-totem .dt-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:800;color:var(--green)}
-.demo-totem .dt-label{color:var(--dim);font-size:.78rem}
-.demo-totem .dt-qr{width:80px;height:80px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-left:auto}
-.demo-totem .dt-qr-grid{width:56px;height:56px;display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
-.demo-totem .dt-qr-grid span{background:#111;border-radius:1px}
-.demo-totem .dt-qr-grid span.w{background:white}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  .slide{padding:40px 20px}
-  .s-title{font-size:2rem}
-  .s-sub{font-size:1rem}
-  .cards-row{gap:12px}
-  .card{width:160px;padding:20px}
-  .flow-step{width:130px;padding:14px 10px}
-  .flow-arrow{display:none}
-  .mockup-row{gap:16px}
-  .compare-row{gap:16px}
-  .stat-big{min-width:130px;padding:16px 20px}
-  .stat-big .sb-num{font-size:2rem}
-  .nav-btn{padding:10px 18px;font-size:.85rem}
-  .demo-totem{width:260px}
+@media(max-width:900px){
+  .slide{padding:30px 16px 80px}
+  .s-title{font-size:1.8rem}
+  .totem{width:300px}
+  .phone{width:200px;min-height:380px}
+  .dash{width:100%;max-width:400px}
+  .dash .d-sb{width:90px}
+  .dash .d-stats{grid-template-columns:repeat(2,1fr)}
+  .instr{width:300px}
+  .demo-row{gap:16px}
+  .nav-btn{padding:8px 14px;font-size:.8rem}
 }
 </style>
 </head>
 <body>
+<div class="slides">
 
-<div class="slides" id="slides">
-
-<!-- ====== SLIDE 1: INTRO ====== -->
+<!-- ===== S0: INTRO ===== -->
 <div class="slide active" id="s0">
-  <div class="s-tag purple">Presentazione progetto</div>
+  <div class="s-tag purple">Demo operativa</div>
   <div class="s-title"><span class="hl">Tornello Virtuale</span></div>
-  <div class="s-sub">Un sistema moderno per la gestione degli ingressi ai corsi delle nostre palestre. Addio fogli di carta e Google Sheets.</div>
-  <div class="stats-row">
-    <div class="stat-big"><div class="sb-num" style="color:var(--accent)">2</div><div class="sb-label">Palestre</div></div>
-    <div class="stat-big"><div class="sb-num" style="color:var(--green)">~1000</div><div class="sb-label">Iscritti per sede</div></div>
-    <div class="stat-big"><div class="sb-num" style="color:var(--orange)">∞</div><div class="sb-label">Corsi gestibili</div></div>
+  <div class="s-sub">Sistema di check-in QR per i corsi delle palestre.<br>Questa presentazione mostra le 4 interfacce del sistema in azione.</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;z-index:1">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;width:150px"><div style="font-size:1.8rem;margin-bottom:6px">🖥️</div><div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem">Totem</div><div style="color:var(--dim);font-size:.75rem">In sala corsi</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;width:150px"><div style="font-size:1.8rem;margin-bottom:6px">📱</div><div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem">App Corsista</div><div style="color:var(--dim);font-size:.75rem">Smartphone</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;width:150px"><div style="font-size:1.8rem;margin-bottom:6px">💻</div><div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem">Segreteria</div><div style="color:var(--dim);font-size:.75rem">Pannello PC</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;width:150px"><div style="font-size:1.8rem;margin-bottom:6px">📺</div><div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem">Istruttore</div><div style="color:var(--dim);font-size:.75rem">Monitor sala</div></div>
   </div>
 </div>
 
-<!-- ====== SLIDE 2: IL PROBLEMA ====== -->
+<!-- ===== S1: TOTEM ===== -->
 <div class="slide" id="s1">
-  <div class="s-tag orange">La situazione attuale</div>
-  <div class="s-title">Perché serve un <span class="hl">cambiamento</span></div>
-  <div class="s-sub">Il sistema attuale con Google Sheets e fogli di presenza manuali presenta diversi limiti operativi.</div>
-  <div class="compare-row">
-    <div class="compare-col old">
-      <h3>❌ Oggi</h3>
-      <div class="compare-item"><span class="ci-icon">🐌</span><div>Registrazione presenze lenta e manuale</div></div>
-      <div class="compare-item"><span class="ci-icon">📊</span><div>Google Sheets diventa lento con molti dati</div></div>
-      <div class="compare-item"><span class="ci-icon">❓</span><div>Nessun controllo automatico degli abbonamenti</div></div>
-      <div class="compare-item"><span class="ci-icon">📱</span><div>I corsisti non vedono i propri ingressi</div></div>
-      <div class="compare-item"><span class="ci-icon">⏱️</span><div>Nessun dato in tempo reale per gli istruttori</div></div>
-    </div>
-    <div class="compare-col new">
-      <h3>✅ Con Tornello Virtuale</h3>
-      <div class="compare-item"><span class="ci-icon">⚡</span><div>Check-in in 3 secondi con QR code</div></div>
-      <div class="compare-item"><span class="ci-icon">☁️</span><div>Database cloud veloce e scalabile</div></div>
-      <div class="compare-item"><span class="ci-icon">🔒</span><div>Validazione automatica abbonamenti e limiti</div></div>
-      <div class="compare-item"><span class="ci-icon">📲</span><div>App personale per ogni corsista</div></div>
-      <div class="compare-item"><span class="ci-icon">📡</span><div>Contatore presenze live per istruttori</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== SLIDE 3: COME FUNZIONA ====== -->
-<div class="slide" id="s2">
-  <div class="s-tag green">Il flusso</div>
-  <div class="s-title">Come funziona in <span class="hl">6 passi</span></div>
-  <div class="s-sub">Dalla preparazione della sala al report di fine giornata, tutto è automatico.</div>
-  <div class="flow">
-    <div class="flow-step anim-delay-1"><div class="fs-num">Passo 1</div><div class="fs-icon">🖥️</div><div class="fs-title">Totem si attiva</div><div class="fs-desc">20 min prima del corso, mostra il QR</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step anim-delay-2"><div class="fs-num">Passo 2</div><div class="fs-icon">📱</div><div class="fs-title">Corsista scansiona</div><div class="fs-desc">Apre l'app e inquadra il QR code</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step anim-delay-3"><div class="fs-num">Passo 3</div><div class="fs-icon">🔍</div><div class="fs-title">Validazione</div><div class="fs-desc">Il sistema verifica abbonamento e limiti</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step anim-delay-4"><div class="fs-num">Passo 4</div><div class="fs-icon">✅</div><div class="fs-title">Esito</div><div class="fs-desc">Conferma o nega l'accesso con motivo</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step anim-delay-5"><div class="fs-num">Passo 5</div><div class="fs-icon">📊</div><div class="fs-title">Aggiornamento</div><div class="fs-desc">Contatore si aggiorna in tempo reale</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step anim-delay-6"><div class="fs-num">Passo 6</div><div class="fs-icon">🔄</div><div class="fs-title">Prossimo corso</div><div class="fs-desc">Il totem passa automaticamente al dopo</div></div>
-  </div>
-</div>
-
-<!-- ====== SLIDE 4: TOTEM ====== -->
-<div class="slide" id="s3">
-  <div class="s-tag purple">Componente 1</div>
-  <div class="s-title">Il <span class="hl">Totem</span> in sala</div>
-  <div class="s-sub">Installato sui Chromebook già presenti. Si attiva automaticamente, mostra il QR per il check-in e il contatore presenze in tempo reale.</div>
-  <div class="mockup-row">
-    <div class="demo-totem">
-      <div class="dt-header"><span>🟢 FitLife</span><span style="font-family:'JetBrains Mono',monospace">18:42</span></div>
-      <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:8px;background:var(--green-soft);color:var(--green);font-size:.7rem;font-weight:600;margin-bottom:10px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green)"></span> Check-in aperto</div>
-      <div class="dt-name">Pilates</div>
-      <div class="dt-instr">👤 Marco</div>
-      <div class="dt-time">18:00 → 19:00</div>
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="dt-counter" style="flex:1">
-          <div><div class="dt-num" id="animCounter">0</div><div class="dt-label">presenti su 25</div></div>
+  <div class="s-tag purple">Totem in sala</div>
+  <div class="s-title">Check-in <span class="hl">in tempo reale</span></div>
+  <div class="demo-row">
+    <div class="totem" id="totem">
+      <div class="t-top"><span>🟢 Palestra FitLife</span><span style="font-family:'JetBrains Mono',monospace" id="totemClock">18:42</span></div>
+      <div class="t-badge on" id="totemBadge"><span style="width:5px;height:5px;border-radius:50%;background:currentColor"></span> <span id="totemBadgeText">Check-in aperto</span></div>
+      <div class="t-name" id="totemCourse">Pilates</div>
+      <div class="t-instr" id="totemInstr">👤 Marco</div>
+      <div class="t-time" id="totemTime">18:00 → 19:00</div>
+      <div class="t-mid">
+        <div class="t-ctr" id="totemCtr">
+          <div class="t-num" id="totemNum">0</div>
+          <div class="t-label"><span id="totemFree">25</span> posti liberi su 25</div>
         </div>
-        <div class="dt-qr">
-          <div class="dt-qr-grid">
-            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
-            <span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span>
-            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
-            <span class="w"></span><span></span><span class="w"></span><span class="w"></span><span class="w"></span><span></span><span class="w"></span>
-            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
-            <span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span>
-            <span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span>
+        <div class="t-qr" id="totemQr">
+          <div class="qr"><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span><span class="w"></span><span class="w"></span><span class="w"></span><span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span><span></span><span class="w"></span><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="t-next" id="totemNext">Prossimo: <strong style="color:var(--text)">Zumba</strong> alle 19:30</div>
+      <div class="t-toast" id="totemToast"></div>
+    </div>
+    <div class="demo-side">
+      <div class="demo-feat"><div class="df-t">✨ Attivazione automatica</div><div class="df-d">Si accende 20 min prima del corso, mostra QR e contatore.</div></div>
+      <div class="demo-feat"><div class="df-t">📡 Aggiornamento live</div><div class="df-d">Ogni check-in aggiorna contatore e posti liberi in tempo reale.</div></div>
+      <div class="demo-feat"><div class="df-t">🔄 Rotazione corsi</div><div class="df-d">A fine lezione passa automaticamente al corso successivo.</div></div>
+      <div class="play-row">
+        <button class="play-btn green" onclick="playTotemCheckin()">▶ Simula check-in</button>
+        <button class="play-btn orange" onclick="playTotemSwitch()">▶ Cambio corso</button>
+        <button class="play-btn" onclick="resetTotem()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== S2: APP CORSISTA ===== -->
+<div class="slide" id="s2">
+  <div class="s-tag green">App corsista</div>
+  <div class="s-title">L'app sullo <span class="hl">smartphone</span></div>
+  <div class="demo-row">
+    <div class="phone" id="phone">
+      <div class="p-notch"></div>
+      <!-- Login screen -->
+      <div class="p-login" id="phoneLogin">
+        <div class="p-login-logo">Tornello Virtuale</div>
+        <div class="p-login-sub">Accedi con tessera e PIN</div>
+        <div class="p-login-card">
+          <h4>Login Corsista</h4>
+          <div class="p-lbl">Numero tessera</div>
+          <input class="p-inp" id="phoneCardInp" value="FL-0001" readonly>
+          <div class="p-lbl">PIN (4 cifre)</div>
+          <input class="p-inp p-inp-pin" id="phonePinInp" type="password" value="1234" readonly>
+          <button class="p-login-btn" onclick="phoneDoLogin()">Accedi</button>
+        </div>
+      </div>
+      <!-- Home screen -->
+      <div class="p-home" id="phoneHome">
+        <div class="p-greet">Ciao, Anna 👋</div>
+        <div class="p-scan" onclick="playAppOk()">📷 Scansiona QR per il check-in</div>
+        <div class="p-sec">I tuoi abbonamenti</div>
+        <div class="p-card">
+          <div class="p-card-top"><span class="p-cname">Pilates</span><span class="p-cbadge">ATTIVO</span></div>
+          <div class="p-csub" id="appPilSub">2 di 3 ingressi usati</div>
+          <div class="p-bar"><div class="p-fill" id="appPilFill" style="width:66%;background:var(--green)"></div></div>
+        </div>
+        <div class="p-card">
+          <div class="p-card-top"><span class="p-cname">Zumba</span><span class="p-cbadge">ATTIVO</span></div>
+          <div class="p-csub">1 di 2 ingressi usati</div>
+          <div class="p-bar"><div class="p-fill" style="width:50%;background:var(--green)"></div></div>
+        </div>
+        <div class="p-sec" style="margin-top:8px">Prossime lezioni</div>
+        <div class="p-card" style="display:flex;align-items:center;gap:8px">
+          <div style="text-align:center;width:32px"><div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.85rem">5</div><div style="font-size:.55rem;color:var(--dim)">MER</div></div>
+          <div><div style="font-size:.72rem;font-weight:600">Pilates</div><div style="font-size:.6rem;color:var(--dim);font-family:'JetBrains Mono',monospace">18:00–19:00</div></div>
+        </div>
+      </div>
+      <!-- Overlays -->
+      <div class="p-ov" id="phoneOvOk">
+        <div class="p-ov-icon ok">✓</div>
+        <div class="p-ov-title">Check-in confermato!</div>
+        <div class="p-ov-sub">Pilates · 18:00</div>
+        <div class="p-ov-box"><div class="p-ov-num" style="color:var(--green)">0</div><div><div style="font-weight:600;font-size:.72rem">Ingressi rimasti</div><div style="font-size:.6rem;color:var(--dim)">questa settimana</div></div></div>
+        <button class="p-ov-close" onclick="closePhoneOv()">Chiudi</button>
+      </div>
+      <div class="p-ov" id="phoneOvNo">
+        <div class="p-ov-icon no">✗</div>
+        <div class="p-ov-title" style="color:var(--red)">Accesso negato</div>
+        <div class="p-ov-sub">Ingressi settimanali esauriti per Pilates.<br>Il limite è 3 ingressi a settimana.</div>
+        <div class="p-ov-box"><div class="p-ov-num" style="color:var(--red)">0/3</div><div><div style="font-weight:600;font-size:.72rem">Ingressi usati</div><div style="font-size:.6rem;color:var(--dim)">Reset lunedì</div></div></div>
+        <button class="p-ov-close" onclick="closePhoneOv()">Chiudi</button>
+      </div>
+    </div>
+    <div class="demo-side">
+      <div class="demo-feat"><div class="df-t">🔐 Login sicuro</div><div class="df-d">Accesso con tessera + PIN a 4 cifre. La sessione resta salvata.</div></div>
+      <div class="demo-feat"><div class="df-t">📊 Dashboard personale</div><div class="df-d">Abbonamenti, ingressi usati/rimanenti, prossime lezioni.</div></div>
+      <div class="demo-feat"><div class="df-t">📷 Scanner QR</div><div class="df-d">Inquadra il QR del totem: il sistema valida e conferma.</div></div>
+      <div class="play-row">
+        <button class="play-btn green" onclick="phoneDoLogin()">▶ Login</button>
+        <button class="play-btn" onclick="playAppOk()">▶ Check-in OK</button>
+        <button class="play-btn red" onclick="playAppNo()">▶ Check-in negato</button>
+        <button class="play-btn" onclick="resetPhone()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== S3: SEGRETERIA ===== -->
+<div class="slide" id="s3">
+  <div class="s-tag blue">Pannello segreteria</div>
+  <div class="s-title">Il centro di <span class="hl">controllo</span></div>
+  <div class="demo-row">
+    <div class="dash" id="dash">
+      <div class="d-top"><div class="d-dot" style="background:#f87171"></div><div class="d-dot" style="background:#fbbf24"></div><div class="d-dot" style="background:#34d399"></div><span style="margin-left:8px;font-size:.7rem;color:var(--dim)">Segreteria — FitLife</span></div>
+      <div class="d-sidebar">
+        <div class="d-sb">
+          <div class="d-sb-item on" onclick="dashShowPage('dashboard')">📊 Dashboard</div>
+          <div class="d-sb-item" onclick="dashShowPage('corsi')">📚 Corsi</div>
+          <div class="d-sb-item">👥 Corsisti</div>
+          <div class="d-sb-item">📈 Report</div>
+          <div class="d-sb-item">🗃️ Archivio</div>
+        </div>
+        <div class="d-content">
+          <!-- Dashboard page -->
+          <div class="d-dashboard" id="dashDashboard">
+            <div class="d-stats">
+              <div class="d-st"><div class="dn" id="dashN1" style="color:var(--accent)">0</div><div class="dl">Corsi oggi</div></div>
+              <div class="d-st"><div class="dn" id="dashN2" style="color:var(--green)">0</div><div class="dl">Check-in</div></div>
+              <div class="d-st"><div class="dn" id="dashN3">0</div><div class="dl">Corsisti attivi</div></div>
+              <div class="d-st"><div class="dn" id="dashN4" style="color:var(--orange)">0%</div><div class="dl">Tasso presenza</div></div>
+            </div>
+            <table class="d-tbl">
+              <thead><tr><th>Corso</th><th>Istruttore</th><th>Orario</th><th>Presenze</th><th>Stato</th></tr></thead>
+              <tbody id="dashBody">
+                <tr><td><strong>Pilates</strong></td><td>Marco</td><td style="font-family:'JetBrains Mono',monospace">18:00–19:00</td><td id="dashPil"><strong>0</strong>/25</td><td><span class="d-bg g">Check-in</span></td></tr>
+                <tr><td><strong>Zumba</strong></td><td>Sara</td><td style="font-family:'JetBrains Mono',monospace">19:30–20:30</td><td><strong>0</strong>/30</td><td><span class="d-bg d">Prossimo</span></td></tr>
+                <tr><td><strong>CrossFit</strong></td><td>Luca</td><td style="font-family:'JetBrains Mono',monospace">20:00–21:00</td><td><strong>0</strong>/20</td><td><span class="d-bg d">Prossimo</span></td></tr>
+                <tr><td><strong>Yoga</strong></td><td>Elena</td><td style="font-family:'JetBrains Mono',monospace">21:00–22:00</td><td><strong>0</strong>/15</td><td><span class="d-bg d">Prossimo</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Corsi page -->
+          <div class="d-corsi" id="dashCorsi">
+            <div class="d-cc">
+              <div class="d-cc-top"><div class="d-cc-name">Pilates</div><span class="d-bg g">Attivo</span></div>
+              <div class="d-cc-instr">👤 Marco · Cap. 25</div>
+              <div class="d-cc-days"><span class="d-cc-day">Lun 18:00–19:00</span><span class="d-cc-day">Mer 18:00–19:00</span><span class="d-cc-day">Ven 18:00–19:00</span></div>
+              <div class="d-cc-btns"><button class="d-cc-btn">✏️ Modifica</button><button class="d-cc-btn">⏸ Sospendi</button><button class="d-cc-btn">🔄 Archivia</button><button class="d-cc-btn">🗑️ Elimina</button></div>
+            </div>
+            <div class="d-cc">
+              <div class="d-cc-top"><div class="d-cc-name">Zumba</div><span class="d-bg g">Attivo</span></div>
+              <div class="d-cc-instr">👤 Sara · Cap. 30</div>
+              <div class="d-cc-days"><span class="d-cc-day">Mar 19:30–20:30</span><span class="d-cc-day">Gio 19:30–20:30</span></div>
+              <div class="d-cc-btns"><button class="d-cc-btn">✏️ Modifica</button><button class="d-cc-btn">⏸ Sospendi</button><button class="d-cc-btn">🔄 Archivia</button><button class="d-cc-btn">🗑️ Elimina</button></div>
+            </div>
+            <div class="d-cc">
+              <div class="d-cc-top"><div class="d-cc-name">CrossFit</div><span class="d-bg o">Sospeso</span></div>
+              <div class="d-cc-instr">👤 Luca · Cap. 20</div>
+              <div class="d-cc-days"><span class="d-cc-day">Lun 20:00–21:00</span><span class="d-cc-day">Mer 20:00–21:00</span></div>
+              <div class="d-cc-btns"><button class="d-cc-btn">✏️ Modifica</button><button class="d-cc-btn">▶ Riattiva</button><button class="d-cc-btn">🔄 Archivia</button><button class="d-cc-btn">🗑️ Elimina</button></div>
+            </div>
           </div>
         </div>
       </div>
-      <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:.72rem;color:var(--dim)">Prossimo: <strong style="color:var(--text)">Zumba</strong> alle 19:30</div>
     </div>
-    <div style="max-width:300px;z-index:1">
-      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">✨ Attivazione automatica</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Il totem si accende 20 minuti prima di ogni corso e si spegne alla fine.</div></div>
-      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📡 Tempo reale</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Ogni check-in aggiorna istantaneamente il contatore su totem e vista istruttore.</div></div>
-      <div><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">🔄 Sostituzione istruttore</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">In caso di sostituzione, basta toccare il nome per aggiornarlo al volo.</div></div>
+    <div class="demo-side">
+      <div class="demo-feat"><div class="df-t">📊 Dashboard live</div><div class="df-d">Statistiche del giorno, sessioni con stato e presenze.</div></div>
+      <div class="demo-feat"><div class="df-t">📚 Gestione corsi</div><div class="df-d">Crea, modifica, sospendi, archivia+rinnova, elimina.</div></div>
+      <div class="demo-feat"><div class="df-t">👥 Anagrafica</div><div class="df-d">Corsisti con tessera, CF, abbonamenti e stato.</div></div>
+      <div class="play-row">
+        <button class="play-btn" onclick="playDashAnim()">▶ Simula giornata</button>
+        <button class="play-btn orange" onclick="dashShowPage('corsi')">▶ Vai a Corsi</button>
+        <button class="play-btn" onclick="resetDash()">↺ Reset</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ====== SLIDE 5: APP ====== -->
+<!-- ===== S4: ISTRUTTORE ===== -->
 <div class="slide" id="s4">
-  <div class="s-tag green">Componente 2</div>
-  <div class="s-title">L'<span class="hl">App</span> del corsista</div>
-  <div class="s-sub">Ogni corsista ha la sua app sullo smartphone. Login con tessera e PIN, scanner QR, e tutto il suo storico.</div>
-  <div class="mockup-row">
-    <div class="demo-phone">
-      <div class="dp-bar"></div>
-      <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:.85rem;margin-bottom:8px">Ciao, Anna 👋</div>
-      <div class="dp-btn">📷 Scansiona QR per il check-in</div>
-      <div style="font-size:.6rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">I tuoi abbonamenti</div>
-      <div class="dp-card">
-        <div style="display:flex;justify-content:space-between;align-items:center"><div class="dp-name">Pilates</div><span style="font-size:.55rem;padding:2px 6px;background:var(--green-soft);color:var(--green);border-radius:4px;font-weight:600">ATTIVO</span></div>
-        <div class="dp-sub">2 di 3 ingressi usati</div>
-        <div class="dp-bar-mini"><div class="dp-fill" style="width:66%"></div></div>
+  <div class="s-tag orange">Vista istruttore</div>
+  <div class="s-title">Il monitor in <span class="hl">sala</span></div>
+  <div class="demo-row">
+    <div class="instr" id="instr">
+      <div class="i-badge on" id="instrBadge"><span style="width:5px;height:5px;border-radius:50%;background:currentColor"></span> <span id="instrBadgeText">Check-in aperto</span></div>
+      <div class="i-name">Pilates</div>
+      <div class="i-sub">👤 Marco · 18:00–19:00</div>
+      <div class="i-ring">
+        <svg viewBox="0 0 180 180">
+          <circle class="bg" cx="90" cy="90" r="76"/>
+          <circle class="fg" id="instrArc" cx="90" cy="90" r="76" style="stroke-dasharray:477.5;stroke-dashoffset:477.5"/>
+        </svg>
+        <div class="i-rn" id="instrNum">0</div>
+        <div class="i-rl">presenti</div>
       </div>
-      <div class="dp-card">
-        <div style="display:flex;justify-content:space-between;align-items:center"><div class="dp-name">Zumba</div><span style="font-size:.55rem;padding:2px 6px;background:var(--green-soft);color:var(--green);border-radius:4px;font-weight:600">ATTIVO</span></div>
-        <div class="dp-sub">1 di 2 ingressi usati</div>
-        <div class="dp-bar-mini"><div class="dp-fill" style="width:50%"></div></div>
+      <div class="i-cards">
+        <div class="i-c"><div class="icn">25</div><div class="icl">Capienza</div></div>
+        <div class="i-c"><div class="icn" id="instrFree">25</div><div class="icl">Posti liberi</div></div>
+        <div class="i-c"><div class="icn" id="instrPct">0%</div><div class="icl">Riempimento</div></div>
+      </div>
+      <div class="i-hist">
+        <div><span>Lunedì — Pilates</span><span style="color:var(--text)">18</span></div>
+        <div><span>Mercoledì — Pilates</span><span style="color:var(--text)">21</span></div>
+        <div><span>Venerdì — Pilates</span><span style="color:var(--text)">16</span></div>
       </div>
     </div>
-    <div style="max-width:320px;z-index:1">
-      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">🔐 Accesso sicuro</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Login con numero tessera + PIN personale di 4 cifre. Il login resta salvato nel telefono.</div></div>
-      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📊 Ingressi sempre visibili</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Il corsista sa sempre quanti ingressi ha usato e quanti ne restano nella settimana.</div></div>
-      <div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">❌ Blocco automatico</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Se l'abbonamento è scaduto o gli ingressi sono esauriti, il check-in viene bloccato con un messaggio chiaro.</div></div>
-      <div><div style="font-weight:700;margin-bottom:4px;font-size:.95rem">📅 Prossime lezioni</div><div style="color:var(--dim);font-size:.88rem;line-height:1.5">Calendario dei prossimi 7 giorni con orari e istruttori, basato sui propri abbonamenti attivi.</div></div>
+    <div class="demo-side">
+      <div class="demo-feat"><div class="df-t">🔢 Contatore XXL</div><div class="df-d">Numero e anello visibili a distanza. Cambia colore: verde → arancione → rosso.</div></div>
+      <div class="demo-feat"><div class="df-t">📊 Storico lezioni</div><div class="df-d">Confronto immediato con le presenze precedenti.</div></div>
+      <div class="demo-feat"><div class="df-t">🟢 Stato automatico</div><div class="df-d">Check-in aperto → In corso → Standby.</div></div>
+      <div class="play-row">
+        <button class="play-btn green" onclick="playInstr()">▶ Simula riempimento</button>
+        <button class="play-btn" onclick="resetInstr()">↺ Reset</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ====== SLIDE 6: SEGRETERIA ====== -->
-<div class="slide" id="s5">
-  <div class="s-tag blue">Componente 3</div>
-  <div class="s-title">Il <span class="hl">Pannello</span> Segreteria</div>
-  <div class="s-sub">Il centro di controllo: gestione corsi, monitoraggio presenze, anagrafica corsisti, report e archivio.</div>
-  <div class="cards-row">
-    <div class="card"><div class="c-icon">📊</div><div class="c-title">Dashboard</div><div class="c-desc">Panoramica giornaliera: corsi in corso, check-in totali, tasso presenza</div></div>
-    <div class="card"><div class="c-icon">📚</div><div class="c-title">Gestione corsi</div><div class="c-desc">Crea, modifica, sospendi, archivia e rinnova i corsi per ogni periodo</div></div>
-    <div class="card"><div class="c-icon">👥</div><div class="c-title">Corsisti</div><div class="c-desc">Anagrafica completa, tessere, abbonamenti, stato ingressi settimanali</div></div>
-    <div class="card"><div class="c-icon">🔄</div><div class="c-title">Ciclo corsi</div><div class="c-desc">Gestione mensile e bimestrale con archiviazione e rinnovo automatico</div></div>
-    <div class="card"><div class="c-icon">📈</div><div class="c-title">Report</div><div class="c-desc">Statistiche presenze, frequenza media, export dati</div></div>
-    <div class="card"><div class="c-icon">⚙️</div><div class="c-title">Impostazioni</div><div class="c-desc">Tempi check-in, dati palestra, gestione utenti, configurazione totem</div></div>
-  </div>
 </div>
 
-<!-- ====== SLIDE 7: ISTRUTTORE ====== -->
-<div class="slide" id="s6">
-  <div class="s-tag orange">Componente 4</div>
-  <div class="s-title">La <span class="hl">Vista</span> Istruttore</div>
-  <div class="s-sub">Schermata essenziale per il monitor in sala: solo il contatore delle presenze, grande e leggibile.</div>
-  <div class="cards-row">
-    <div class="card" style="width:260px"><div class="c-icon">🔢</div><div class="c-title">Contatore grande</div><div class="c-desc">Numero presenti visibile a colpo d'occhio, con anello che cambia colore in base al riempimento</div></div>
-    <div class="card" style="width:260px"><div class="c-icon">🟢</div><div class="c-title">3 stati chiari</div><div class="c-desc">Check-in aperto → In corso → Standby. L'istruttore sa sempre in che fase si trova</div></div>
-    <div class="card" style="width:260px"><div class="c-icon">📋</div><div class="c-title">Storico rapido</div><div class="c-desc">Le presenze delle ultime lezioni per confronto immediato con la media</div></div>
-  </div>
-</div>
-
-<!-- ====== SLIDE 8: INFRASTRUTTURA ====== -->
-<div class="slide" id="s7">
-  <div class="s-tag purple">Tecnologia</div>
-  <div class="s-title">Semplice e a <span class="hl">costo zero</span></div>
-  <div class="s-sub">Il sistema si basa su strumenti gratuiti e usa l'hardware già presente in palestra.</div>
-  <div class="cards-row">
-    <div class="card"><div class="c-icon">💰</div><div class="c-title">Costo zero</div><div class="c-desc">Supabase free tier, hosting gratuito. Nessun costo mensile per il software</div></div>
-    <div class="card"><div class="c-icon">🖥️</div><div class="c-title">Hardware esistente</div><div class="c-desc">I Chromebook già in sala diventano i totem. Nessun acquisto necessario</div></div>
-    <div class="card"><div class="c-icon">📱</div><div class="c-title">Nessuna app da scaricare</div><div class="c-desc">PWA: si apre dal browser e si installa con un tocco. Niente App Store</div></div>
-    <div class="card"><div class="c-icon">☁️</div><div class="c-title">Cloud sicuro</div><div class="c-desc">Dati su Supabase (PostgreSQL). Backup automatici, crittografia, GDPR</div></div>
-  </div>
-</div>
-
-<!-- ====== SLIDE 9: PROSSIMI PASSI ====== -->
-<div class="slide" id="s8">
-  <div class="s-tag green">Roadmap</div>
-  <div class="s-title">Dove siamo e <span class="hl">prossimi passi</span></div>
-  <div class="s-sub">Il sistema è già stato progettato, prototipato e collegato a un database di test funzionante.</div>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Architettura database</h4><p>6 tabelle, relazioni, funzioni di validazione — tutto creato e testato</p></div></div>
-    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Prototipi interattivi</h4><p>Totem, App corsista, Pannello segreteria, Vista istruttore — tutti funzionanti</p></div></div>
-    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Database live con dati di test</h4><p>Supabase attivo con 2 palestre, 8 corsi, 18 corsisti e presenze simulate</p></div></div>
-    <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-content"><h4>Totem e App collegati al database</h4><p>Check-in reale, validazione automatica, contatore presenze in tempo reale</p></div></div>
-    <div class="tl-item"><div class="tl-dot next">→</div><div class="tl-content"><h4>Pannello segreteria e vista istruttore live</h4><p>Collegamento al database per completare l'ecosistema</p></div></div>
-    <div class="tl-item"><div class="tl-dot future">○</div><div class="tl-content"><h4>Integrazione ricevutario</h4><p>Collegamento con il processo giornaliero del gestore per import automatico iscritti</p></div></div>
-    <div class="tl-item"><div class="tl-dot future">○</div><div class="tl-content"><h4>Deploy e test in palestra</h4><p>Installazione totem sui Chromebook, test con corsisti reali</p></div></div>
-  </div>
-</div>
-
-<!-- ====== SLIDE 10: FINALE ====== -->
-<div class="slide" id="s9">
-  <div class="s-tag purple">Grazie</div>
-  <div class="s-title" style="font-size:2.6rem">Pronti a <span class="hl">modernizzare</span><br>la gestione dei corsi?</div>
-  <div class="s-sub" style="margin-bottom:40px">Il sistema è progettato, testato e pronto per essere finalizzato. Bastano poche settimane per andare live.</div>
-  <div class="stats-row">
-    <div class="stat-big"><div class="sb-num" style="color:var(--green)">3s</div><div class="sb-label">Tempo di check-in</div></div>
-    <div class="stat-big"><div class="sb-num" style="color:var(--accent)">0€</div><div class="sb-label">Costi software</div></div>
-    <div class="stat-big"><div class="sb-num" style="color:var(--orange)">24/7</div><div class="sb-label">Dati accessibili</div></div>
-  </div>
-  <div style="margin-top:32px;color:var(--dim);font-size:.9rem;z-index:1">
-    <strong style="color:var(--text)">Tornello Virtuale</strong> — Progettato per le nostre palestre
-  </div>
-</div>
-
-</div>
-
-<!-- NAV BAR -->
+<!-- NAV -->
 <div class="nav-bar">
-  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Indietro</button>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-    <div class="nav-progress" id="navDots"></div>
-    <div class="nav-counter"><span id="slideNum">1</span> / <span id="slideTotal">10</span></div>
+  <button class="nav-btn" id="prevBtn" onclick="prev()" disabled>← Indietro</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+    <div class="nav-dots" id="dots"></div>
+    <div class="nav-info"><span id="sn">1</span> / 5</div>
   </div>
-  <button class="nav-btn primary" id="nextBtn" onclick="nextSlide()">Avanti →</button>
+  <button class="nav-btn primary" id="nextBtn" onclick="next()">Avanti →</button>
 </div>
 
 <script>
-const totalSlides = 10;
-let current = 0;
-
-// Build dots
-const dotsEl = document.getElementById('navDots');
-for (let i = 0; i < totalSlides; i++) {
-  const dot = document.createElement('div');
-  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-  dot.onclick = () => goToSlide(i);
-  dot.style.cursor = 'pointer';
-  dotsEl.appendChild(dot);
+// ====== NAV ======
+const T = 5;
+let cur = 0;
+const dots = document.getElementById('dots');
+for (let i = 0; i < T; i++) { const d = document.createElement('div'); d.className = 'nav-dot' + (i===0?' on':''); d.onclick = () => go(i); dots.appendChild(d); }
+function go(n) {
+  if (n===cur||n<0||n>=T) return;
+  const old = cur; cur = n;
+  const os = document.getElementById('s'+old);
+  os.classList.remove('active'); os.classList.add('exit');
+  setTimeout(() => os.classList.remove('exit'), 500);
+  document.getElementById('s'+n).classList.add('active');
+  document.getElementById('prevBtn').disabled = (n===0);
+  document.getElementById('nextBtn').disabled = (n===T-1);
+  document.getElementById('nextBtn').textContent = n===T-1 ? '🎉 Fine' : 'Avanti →';
+  document.getElementById('sn').textContent = n+1;
+  dots.querySelectorAll('.nav-dot').forEach((d,i) => d.className = 'nav-dot' + (i===n?' on':''));
+  // Auto-play
+  if (n===1) setTimeout(playTotemCheckin, 700);
+  if (n===4) setTimeout(playInstr, 700);
 }
+function next(){go(cur+1)} function prev(){go(cur-1)}
+document.addEventListener('keydown', e => { if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()} if(e.key==='ArrowLeft'){e.preventDefault();prev()} });
+let tx=0; document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX}); document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50){d>0?next():prev()}});
 
-function goToSlide(n) {
-  if (n === current || n < 0 || n >= totalSlides) return;
-  
-  const oldSlide = document.getElementById('s' + current);
-  const newSlide = document.getElementById('s' + n);
-  
-  oldSlide.classList.remove('active');
-  oldSlide.classList.add('exit');
-  setTimeout(() => oldSlide.classList.remove('exit'), 600);
-  
-  newSlide.classList.add('active');
-  
-  current = n;
-  updateNav();
-
-  // Trigger counter animation on totem slide
-  if (current === 3) animateTotemCounter();
-}
-
-function nextSlide() { goToSlide(current + 1); }
-function prevSlide() { goToSlide(current - 1); }
-
-function updateNav() {
-  document.getElementById('prevBtn').disabled = (current === 0);
-  document.getElementById('nextBtn').disabled = (current === totalSlides - 1);
-  document.getElementById('nextBtn').textContent = current === totalSlides - 1 ? '🎉 Fine' : 'Avanti →';
-  document.getElementById('slideNum').textContent = current + 1;
-  
-  document.querySelectorAll('.nav-dot').forEach((d, i) => {
-    d.className = 'nav-dot' + (i === current ? ' active' : '');
-  });
-}
-
-// Keyboard navigation
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-});
-
-// Touch swipe
-let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-document.addEventListener('touchend', e => {
-  const diff = touchStartX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) nextSlide(); else prevSlide();
+// ====== TOTEM ======
+let totemN = 0, totemBusy = false;
+const names = ['Anna R.','Francesco M.','Valentina G.','Marco P.','Laura B.','Simone T.','Chiara V.','Matteo L.','Giulia S.','Alessandro F.','Federica D.','Davide C.','Elena Z.','Roberto N.','Silvia P.','Andrea G.','Marta R.','Luca D.','Sofia B.','Paolo M.','Irene C.','Giovanni T.','Beatrice L.','Nicola S.','Cristina M.'];
+function playTotemCheckin() {
+  if (totemBusy) return; totemBusy = true;
+  const batch = Math.min(5, 25 - totemN);
+  let i = 0;
+  function tick() {
+    if (i >= batch) { totemBusy = false; return; }
+    totemN++;
+    document.getElementById('totemNum').textContent = totemN;
+    document.getElementById('totemFree').textContent = 25 - totemN;
+    const el = document.getElementById('totemNum');
+    if (totemN > 20) el.style.color = 'var(--red)';
+    else if (totemN > 15) el.style.color = 'var(--orange)';
+    else el.style.color = 'var(--green)';
+    const ctr = document.getElementById('totemCtr');
+    ctr.classList.add('flash');
+    const toast = document.getElementById('totemToast');
+    toast.className = 't-toast ok show';
+    toast.textContent = '✅ ' + names[(totemN-1)%names.length] + ' — check-in OK';
+    setTimeout(() => { ctr.classList.remove('flash'); toast.classList.remove('show'); }, 650);
+    i++;
+    setTimeout(tick, 850);
   }
-});
+  tick();
+}
+function playTotemSwitch() {
+  const t = document.getElementById('totem');
+  const badge = document.getElementById('totemBadge');
+  const badgeT = document.getElementById('totemBadgeText');
+  // Phase 1: in corso
+  badge.className = 't-badge off'; badgeT.textContent = 'In corso';
+  document.getElementById('totemQr').style.opacity = '0.2';
+  const toast = document.getElementById('totemToast');
+  toast.className = 't-toast ok show'; toast.textContent = '📋 Check-in chiuso — lezione in corso';
+  setTimeout(() => {
+    toast.classList.remove('show');
+    // Phase 2: switch
+    setTimeout(() => {
+      document.getElementById('totemCourse').textContent = 'Zumba';
+      document.getElementById('totemInstr').textContent = '👤 Sara';
+      document.getElementById('totemTime').textContent = '19:30 → 20:30';
+      document.getElementById('totemNext').innerHTML = 'Prossimo: <strong style="color:var(--text)">CrossFit</strong> alle 20:00';
+      totemN = 0;
+      document.getElementById('totemNum').textContent = '0';
+      document.getElementById('totemNum').style.color = 'var(--green)';
+      document.getElementById('totemFree').textContent = '30';
+      document.getElementById('totemCtr').querySelector('.t-label').textContent = '30 posti liberi su 30';
+      badge.className = 't-badge on'; badgeT.textContent = 'Check-in aperto';
+      document.getElementById('totemQr').style.opacity = '1';
+      toast.className = 't-toast ok show'; toast.textContent = '🔄 Nuovo corso: Zumba — check-in aperto!';
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }, 1200);
+  }, 2000);
+}
+function resetTotem() {
+  totemN = 0; totemBusy = false;
+  document.getElementById('totemNum').textContent = '0';
+  document.getElementById('totemNum').style.color = 'var(--green)';
+  document.getElementById('totemFree').textContent = '25';
+  document.getElementById('totemCtr').querySelector('.t-label').textContent = '25 posti liberi su 25';
+  document.getElementById('totemCourse').textContent = 'Pilates';
+  document.getElementById('totemInstr').textContent = '👤 Marco';
+  document.getElementById('totemTime').textContent = '18:00 → 19:00';
+  document.getElementById('totemNext').innerHTML = 'Prossimo: <strong style="color:var(--text)">Zumba</strong> alle 19:30';
+  document.getElementById('totemBadge').className = 't-badge on';
+  document.getElementById('totemBadgeText').textContent = 'Check-in aperto';
+  document.getElementById('totemQr').style.opacity = '1';
+}
 
-// Animate totem counter
-function animateTotemCounter() {
-  const el = document.getElementById('animCounter');
-  let n = 0;
-  const target = 18;
-  const interval = setInterval(() => {
-    n++;
-    el.textContent = n;
-    if (n >= target) clearInterval(interval);
-  }, 100);
+// ====== PHONE ======
+function phoneDoLogin() {
+  document.getElementById('phoneLogin').classList.add('hide');
+  document.getElementById('phoneHome').classList.add('show');
+}
+function playAppOk() {
+  phoneDoLogin();
+  document.getElementById('phoneOvOk').classList.add('show');
+  document.getElementById('appPilSub').textContent = '3 di 3 ingressi usati';
+  document.getElementById('appPilFill').style.width = '100%';
+  document.getElementById('appPilFill').style.background = 'var(--orange)';
+}
+function playAppNo() {
+  phoneDoLogin();
+  document.getElementById('phoneOvNo').classList.add('show');
+}
+function closePhoneOv() {
+  document.getElementById('phoneOvOk').classList.remove('show');
+  document.getElementById('phoneOvNo').classList.remove('show');
+}
+function resetPhone() {
+  closePhoneOv();
+  document.getElementById('phoneLogin').classList.remove('hide');
+  document.getElementById('phoneHome').classList.remove('show');
+  document.getElementById('appPilSub').textContent = '2 di 3 ingressi usati';
+  document.getElementById('appPilFill').style.width = '66%';
+  document.getElementById('appPilFill').style.background = 'var(--green)';
+}
+
+// ====== DASHBOARD ======
+let dashBusy = false;
+function dashShowPage(p) {
+  const sb = document.querySelectorAll('.d-sb-item');
+  sb.forEach(s => s.classList.remove('on'));
+  if (p === 'corsi') {
+    sb[1].classList.add('on');
+    document.getElementById('dashDashboard').classList.add('hide');
+    document.getElementById('dashCorsi').classList.add('show');
+  } else {
+    sb[0].classList.add('on');
+    document.getElementById('dashDashboard').classList.remove('hide');
+    document.getElementById('dashCorsi').classList.remove('show');
+  }
+}
+function playDashAnim() {
+  if (dashBusy) return; dashBusy = true;
+  dashShowPage('dashboard');
+  const targets = {n1:5,n2:87,n3:142,n4:68};
+  const vals = {n1:0,n2:0,n3:0,n4:0};
+  let pilN = 0;
+  function tick() {
+    let done = true;
+    for (const k in targets) {
+      if (vals[k] < targets[k]) {
+        vals[k] += Math.ceil(targets[k] / 25);
+        if (vals[k] > targets[k]) vals[k] = targets[k];
+        const el = document.getElementById('dash'+k.charAt(0).toUpperCase()+k.slice(1));
+        el.textContent = k==='n4' ? vals[k]+'%' : vals[k];
+        done = false;
+      }
+    }
+    if (pilN < 18) { pilN++; document.getElementById('dashPil').innerHTML = '<strong>'+pilN+'</strong>/25'; }
+    if (!done) setTimeout(tick, 70);
+    else dashBusy = false;
+  }
+  tick();
+}
+function resetDash() {
+  dashBusy = false;
+  dashShowPage('dashboard');
+  ['N1','N2','N3'].forEach(k => document.getElementById('dash'+k).textContent = '0');
+  document.getElementById('dashN4').textContent = '0%';
+  document.getElementById('dashPil').innerHTML = '<strong>0</strong>/25';
+}
+
+// ====== INSTRUCTOR ======
+const circ = 2 * Math.PI * 76;
+let instrN = 0, instrBusy = false;
+function playInstr() {
+  if (instrBusy) return; instrBusy = true;
+  const target = 22;
+  function tick() {
+    if (instrN >= target) {
+      // Switch to "in corso"
+      setTimeout(() => {
+        document.getElementById('instrBadge').className = 'i-badge corso';
+        document.getElementById('instrBadgeText').textContent = 'In corso';
+        instrBusy = false;
+      }, 600);
+      return;
+    }
+    instrN++;
+    document.getElementById('instrNum').textContent = instrN;
+    document.getElementById('instrFree').textContent = 25 - instrN;
+    const pct = instrN / 25;
+    document.getElementById('instrPct').textContent = Math.round(pct * 100) + '%';
+    const arc = document.getElementById('instrArc');
+    arc.style.strokeDashoffset = circ * (1 - pct);
+    if (pct > 0.85) arc.style.stroke = 'var(--red)';
+    else if (pct > 0.65) arc.style.stroke = 'var(--orange)';
+    else arc.style.stroke = 'var(--green)';
+    setTimeout(tick, 130);
+  }
+  tick();
+}
+function resetInstr() {
+  instrN = 0; instrBusy = false;
+  document.getElementById('instrNum').textContent = '0';
+  document.getElementById('instrFree').textContent = '25';
+  document.getElementById('instrPct').textContent = '0%';
+  const arc = document.getElementById('instrArc');
+  arc.style.strokeDashoffset = circ;
+  arc.style.stroke = 'var(--green)';
+  document.getElementById('instrBadge').className = 'i-badge on';
+  document.getElementById('instrBadgeText').textContent = 'Check-in aperto';
 }
 </script>
 </body>
